@@ -1,8 +1,6 @@
 'use client';
 
-export const dynamic = 'force-dynamic';
-
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -103,7 +101,7 @@ function checkType(value: string, expectedType: 'image' | 'text' | undefined, la
   return true;
 }
 
-export default function TemplatesPage() {
+function TemplatesContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const isFromGenerator = searchParams.get('from') === 'generator';
@@ -319,5 +317,13 @@ export default function TemplatesPage() {
         )}
       </main>
     </div>
+  );
+}
+
+export default function TemplatesPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">加载中...</div>}>
+      <TemplatesContent />
+    </Suspense>
   );
 }
